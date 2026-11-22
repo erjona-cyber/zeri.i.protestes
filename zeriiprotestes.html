@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zëri i Protestës - Debati Qytetar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Zëri i Protestës</h1>
+        <nav>
+            <a href="index.html">Kryefaqja</a>
+            <a href="rights.html">Të Drejtat Tona</a>
+            <a href="blog.html">Hapësira e Diskutimit</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h2>Hapësira e Diskutimit Qytetar</h2>
+            <p>Diskuto lirshëm rreth metodave, synimeve afatgjata dhe organizimit të protestës.</p>
+        </section>
+
+        <!-- Forma për të shtuar një mendim/diskutim -->
+        <section class="post-form-section">
+            <h3>Shto një mendim ose sugjerim</h3>
+            <form id="discussionForm">
+                <div class="form-group">
+                    <label for="userName">Emri ose Pseudonimi:</label>
+                    <input type="text" id="userName" required placeholder="p.sh. Qytetari Aktiv">
+                </div>
+                <div class="form-group">
+                    <label for="userTopic">Tema / Çështja:</label>
+                    <input type="text" id="userTopic" required placeholder="p.sh. Synimet afatgjata të protestës">
+                </div>
+                <div class="form-group">
+                    <label for="userMessage">Mesazhi yt:</label>
+                    <textarea id="userMessage" rows="4" required placeholder="Shkruaj mendimin tënd këtu..."></textarea>
+                </div>
+                <button type="submit" class="btn">Publiko Diskutimin</button>
+            </form>
+        </section>
+
+        <!-- Seksioni ku shfaqen diskutimet -->
+        <section class="discussions-list">
+            <h3>Diskutimet e Fundit</h3>
+            <div id="postsContainer">
+                <!-- Këtu do të shfaqen postimet automatikisht përmes JavaScript -->
+                <article class="post-card">
+                    <h4>Rëndësia e organizimit paqësor</h4>
+                    <span class="author">Nga: Anila M.</span>
+                    <p>Mendoj se fokusi ynë kryesor duhet të jetë transparenca dhe ruajtja e karakterit paqësor të çdo tubimi...</p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Zëri i Protestës - Të drejtat dhe Liritë Themelore.</p>
+    </footer>
+
+    <script>
+        // Kodi JavaScript për të shtuar postimet në kohë reale (lokalisht)
+        const form = document.getElementById('discussionForm');
+        const container = document.getElementById('postsContainer');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('userName').value;
+            const topic = document.getElementById('userTopic').value;
+            const message = document.getElementById('userMessage').value;
+
+            // Krijimi i elementit të ri të postimit
+            const article = document.createElement('article');
+            article.classList.add('post-card');
+            article.innerHTML = `
+                <h4>${topic}</h4>
+                <span class="author">Nga: ${name}</span>
+                <p>${message}</p>
+            `;
+
+            // Shtimi në krye të listës
+            container.prepend(article);
+
+            // Pastrimi i formës
+            form.reset();
+        });
+    </script>
+</body>
+</html>
