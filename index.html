@@ -1,0 +1,129 @@
+DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zëri i Protestës - Debati Qytetar</title>
+    <style>
+        /* Disa stile bazë sa për ta parë si duket */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
+        header { background: #111; color: #fff; padding: 1rem; text-align: center; }
+        nav a { color: #fff; margin: 0 15px; text-decoration: none; }
+        .container { max-width: 800px; margin: 20px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group textarea { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        .btn { background: #d9534f; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn:hover { background: #c9302c; }
+        .post-card { background: #f9f9f9; border-left: 4px solid #d9534f; padding: 15px; margin-bottom: 15px; border-radius: 4px; }
+        .post-card h4 { margin: 0 0 5px 0; color: #111; }
+        .author { font-size: 0.85rem; color: #666; display: block; margin-bottom: 10px; }
+        footer { text-align: center; padding: 15px; color: #777; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Zëri i Protestës</h1>
+        <nav>
+            <a href="index.html">Kryefaqja</a>
+            <a href="tedrejtat.html">Të Drejtat Tona</a>
+            <a href="blog.html">Hapësira e Diskutimit</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h2>Hapësira e Diskutimit Qytetar</h2>
+            <p>Diskuto lirshëm rreth metodave, synimeve afatgjata dhe organizimit të protestës. Të dhënat ruhen lokalisht në pajisjen tuaj.</p>
+        </section>
+
+        <!-- Forma për të shtuar një mendim/diskutim -->
+        <section class="post-form-section">
+            <h3>Shto një mendim ose sugjerim</h3>
+            <form id="discussionForm">
+                <div class="form-group">
+                    <label for="userName">Emri ose Pseudonimi:</label>
+                    <input type="text" id="userName" required placeholder="p.sh. Qytetari Aktiv">
+                </div>
+                <div class="form-group">
+                    <label for="userTopic">Tema / Çështja:</label>
+                    <input type="text" id="userTopic" required placeholder="p.sh. Synimet afatgjata të protestës">
+                </div>
+                <div class="form-group">
+                    <label for="userMessage">Mesazhi yt:</label>
+                    <textarea id="userMessage" rows="4" required placeholder="Shkruaj mendimin tjetër këtu..."></textarea>
+                </div>
+                <button type="submit" class="btn">Publiko Diskutimin</button>
+            </form>
+        </section>
+
+        <!-- Seksioni ku shfaqen diskutimet -->
+        <section class="discussions-list" style="margin-top: 30px;">
+            <h3>Diskutimet e Fundit</h3>
+            <div id="postsContainer">
+                <!-- Këtu do të ngarkohen postimet automatikisht -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Zëri i Protestës - Të drejtat dhe Liritë Themelore.</p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('discussionForm');
+        const container = document.getElementById('postsContainer');
+
+        // 1. Funksioni që lexon postimet nga LocalStorage sapo hapet faqja
+        function loadPosts() {
+            // Marrim vlerat e ruajtura. Nëse s'ka asgjë, kthejmë një array bosh []
+            const savedPosts = JSON.parse(localStorage.getItem('protestPosts')) || [];
+            
+            container.innerHTML = ''; // Pastrojmë kutinë fillimisht
+
+            // Për çdo postim të ruajtur, krijojmë elementin HTML dhe e shfaqim
+            savedPosts.forEach(post => {
+                const article = document.createElement('article');
+                article.classList.add('post-card');
+                article.innerHTML = `
+                    <h4>${post.topic}</h4>
+                    <span class="author">Nga: ${post.name}</span>
+                    <p>${post.message}</p>
+                `;
+                container.appendChild(article); // I shtojmë me rradhë
+            });
+        }
+
+        // Thërrasim funksionin sapo ngarkohet skripti
+        loadPosts();
+
+        // 2. Kur klikohet butoni për të dërguar postimin e ri
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('userName').value;
+            const topic = document.getElementById('userTopic').value;
+            const message = document.getElementById('userMessage').value;
+
+            // Krijojmë një objekt të ri për postimin
+            const newPost = { name, topic, message };
+
+            // Marrim postimet ekzistuese nga LocalStorage
+            const savedPosts = JSON.parse(localStorage.getItem('protestPosts')) || [];
+
+            // Shtojmë postimin e ri në *fillim* të listës
+            savedPosts.unshift(newPost);
+
+            // Ruajmë listën e re përsëri në LocalStorage (duhet kthyer në string me JSON.stringify)
+            localStorage.setItem('protestPosts', JSON.stringify(savedPosts));
+
+            // Ringarkojmë listën në ekran që të duket menjëherë ndryshimi
+            loadPosts();
+
+            // Pastrojmë fushat e formularit
+            form.reset();
+        });
+    </script>
+</body>
+</html>
